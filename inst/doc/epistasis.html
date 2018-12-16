@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Lotfi Slim" />
+
+<meta name="date" content="2018-12-04" />
+
+<title>Robust epistasis detection with epiGWAS</title>
+
+<script>$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="popover"]').popover();
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Robust epistasis detection with epiGWAS</h1>
+<h4 class="author"><em>Lotfi Slim</em></h4>
+<h4 class="date"><em>2018-12-04</em></h4>
+
+
+
+<style>
+body {
+text-align: justify}
+</style>
+<p>In this vignette, we cover the epistasis detection methods implemented in this package. The methods can be partitioned into two main categories: those based on modified outcome, and those based on outcome weighted learning. Both methods recover pure epistatic interactions with a predetermined variant, referred to as the <code>target</code>. The <code>target</code> can be drawn from the literature, experiments or top hits in previous GWAS. Narrowing the scope around a single variant is made possible by propensity scores <span class="citation">(Rosenbaum and Rubin 1983)</span> which, for genomic data, model the linkage disequilibrium (LD) dependency between the <code>target</code> and neighboring variants. We include them differently in outcome weighted learning and modified outcome in order to identify the SNPs interacting with the target.</p>
+<p>The methods are briefly reviewed in this vignette before showcasing their performance on a dataset of simulated genotypes. For more details, we refer the prospective user to <span class="citation">(Slim et al. 2018)</span>.</p>
+<div id="phenotype-genotype-decomposition" class="section level2">
+<h2>Phenotype-genotype decomposition</h2>
+<p>We first consider a triplet of random variables <span class="math inline">\(\left(X, A, Y\right)\)</span>:</p>
+<ul>
+<li><span class="math inline">\(Y\)</span> denotes a binary (for case-control studies) or continuous phenotype (for quantitative GWAS).</li>
+<li><span class="math inline">\(X= \left(X_1,\cdots, X_p\right) \in \lbrace 0, 1, 2\rbrace^{p}\)</span> represents a genotype with <span class="math inline">\(p\)</span> single-nucleotide polymorphisms (SNPs). <span class="math inline">\(X_j\)</span> encodes the number of minor alleles of SNP j (allelic dosage).</li>
+<li><span class="math inline">\(A\)</span> is a <span class="math inline">\((p+1)\)</span>-th SNP that is encoded as <span class="math inline">\(\lbrace -1, +1\rbrace\)</span>. Let <span class="math inline">\(\underline{A} = (A+1)/2\)</span> be a second binarized version of <span class="math inline">\(A\)</span> with values in <span class="math inline">\(\lbrace 0,+1\rbrace\)</span>. Depending on the binarization rule for the SNP values <span class="math inline">\(\lbrace 0, 1, 2\rbrace\)</span>, we can model both dominant and recessive mechanisms.</li>
+</ul>
+<p>The symmetric encoding of <span class="math inline">\(A\)</span> allows the following genotype-phenotype decomposition: <span class="math display">\[
+Y = \mu(X) + \delta(X)\cdot A + \epsilon,
+\]</span> where <span class="math inline">\(\epsilon\)</span> is a zero mean random variable and <span class="math display">\[
+\left\{
+\begin{aligned}
+\mu (X) &amp;= \frac{1}{2}\left[\mathbb{E}(Y\lvert A=+1,X)+\mathbb{E}(Y\lvert A=-1,X)\right] \,,\\
+\delta (X) &amp;= \frac{1}{2}\left[\mathbb{E}(Y\lvert A=+1,X)-\mathbb{E}(Y\lvert A=-1,X)\right] \,.
+\end{aligned}
+\right.
+\]</span></p>
+<p>The above decomposition separates the main effects term <span class="math inline">\(\mu(X)\)</span> from <span class="math inline">\(\delta(X)\cdot A\)</span>, which models the pure epistatic effects of the SNPs in <span class="math inline">\(X\)</span> with the <code>target</code> SNP <span class="math inline">\(A\)</span>. Under a sparsity assumption for <span class="math inline">\(\delta(X)\)</span>, detecting epistasis amounts to recovering the support of <span class="math inline">\(\delta(X)\)</span>. However, for a given sample, we only observe one of the two possibilities (either <span class="math inline">\(A = +1\)</span> or <span class="math inline">\(A = -1\)</span>), making it impossible to directly estimate the term <span class="math inline">\(\delta(X)\)</span>. To overcome this problem, we make use of the propensity score <span class="math inline">\(\pi(A\lvert X)\)</span>. Mathematically speaking, it corresponds to the conditional probability of <span class="math inline">\(A\)</span> given <span class="math inline">\(X\)</span>. In our case, where <span class="math inline">\(A\)</span> and <span class="math inline">\(X\)</span> are SNPs, <span class="math inline">\(\pi(A\lvert X)\)</span> models the LD between <span class="math inline">\(A\)</span> and <span class="math inline">\(X\)</span>. The first category of methods, which we call <em>modified outcome</em>, incorporates <span class="math inline">\(\pi(A\lvert X)\)</span> in the outcome. The second category, <em>outcome weighted learning</em>, includes them in the sample weights along with the phenotype <span class="math inline">\(Y\)</span>. Both categories are penalized regression approaches to which we apply a stability selection procedure <span class="citation">(Meinshausen and Bühlmann 2010)</span> for support estimation.</p>
+</div>
+<div id="modified-outcome" class="section level2">
+<h2>Modified outcome</h2>
+<p>In modified outcome, we substitute <span class="math inline">\(A\)</span> with <span class="math inline">\(\underline{A}\)</span> to rewrite <span class="math inline">\(\delta(X)\)</span> in the following way: <span class="math display">\[
+\delta(X) = \mathbb{E} \left[Y\left(\frac{\underline{A}}{\pi(\underline{A}=1\lvert X)} - \frac{1 - \underline{A}}{\pi(\underline{A}=0\lvert X)}\right)\Bigg\lvert X\right]
+\]</span></p>
+<p>Let <span class="math inline">\(\underline{Y}\)</span> denote the modified outcome: <span class="math display">\[
+\underline{Y} = Y\left(\frac{\underline{A}}{\pi(\underline{A}=1\lvert X)} - \frac{1 - \underline{A}}{\pi(\underline{A}=0\lvert X)}\right)
+\]</span></p>
+<p>The risk difference term <span class="math inline">\(\delta(X)\)</span> is then simplified to: <span class="math display">\[
+\delta(X) = \frac{1}{2}\mathbb{E}\left[\underline{Y}\lvert X\right]
+\]</span></p>
+<p>We can then recover the support of <span class="math inline">\(\delta(X)\)</span> by applying a model selection procedure to the penalized regression problem where the sample covariates are <span class="math inline">\(X\)</span> and the outcome is <span class="math inline">\(\underline{Y}\)</span>. However, in case of misspecification of the propensity score, modified outcome may suffer from numerical instability. We therefore propose three extensions to help mitigate this effect. The first extension, <em>shifted modified outcome</em>, consists in the addition of a regularization term <span class="math inline">\(\xi\)</span> to the inverses of the propensity scores <em>i.e.</em> <span class="math inline">\(1/(\pi(A\lvert X) + \xi)\)</span>. The second proposition, <em>normalized modified outcome</em>, respectively normalizes <span class="math inline">\(\underline{A}/\pi(\underline{A} = 1\lvert X)\)</span> and <span class="math inline">\((1-\underline{A})/\pi(\underline{A} = 0\lvert X)\)</span> by their sums, <span class="math inline">\(\sum_{i=1}^{n} \dfrac{\underline{A}^{(i)}}{\pi(\underline{A}^{(i)} = 1\lvert X^{(i)})}\)</span> and <span class="math inline">\(\sum_{i=1}^{n} \dfrac{1-\underline{A}^{(i)}}{\pi(\underline{A}^{(i)} = 0\lvert X^{(i)})}\)</span>. The last but certainly not least proposition is <em>robust modified outcome</em> <span class="citation">(see Slim et al. 2018; also Lunceford and Davidian 2004)</span>. In extensive simulations <span class="citation">(Slim et al. 2018)</span>, it outperformed not only the other approaches within the modified outcome family, but also BOOST <span class="citation">(Wan et al. 2010)</span>, a state-of-the-art method for epistasis detection.</p>
+</div>
+<div id="outcome-weighted-learning" class="section level2">
+<h2>Outcome weighted learning</h2>
+<p>In outcome weighted learning, instead of the estimation of the difference of <span class="math inline">\(\mathbb{E}(Y\lvert A = +1, X)\)</span> and <span class="math inline">\(\mathbb{E}(Y\lvert A = -1, X)\)</span>, we predict their <span class="math inline">\(\log\)</span>-ratio:</p>
+<p><span class="math display">\[
+d(X) = \ln \frac{\mathbb{E}(Y\lvert A = +1, X)}{\mathbb{E}(Y\lvert A = +1, X)}
+\]</span></p>
+<p>The verification of <span class="math inline">\(\text{sign}\; \delta(X) = \text{sign}\; d(X)\)</span> is straightforward. This makes outcome weighted learning a relaxation of modified outcome. However, the regression models are completely unrelated. Outcome weighted learning is a weighted binary classification problem where the sample weights are <span class="math inline">\(Y/\pi(A\lvert X)\)</span>, the outcome is the target <span class="math inline">\(A\)</span> and the covariates remain <span class="math inline">\(X\)</span>. Without regularization, the use of the inverses of propensity scores can also result in numerical instability.</p>
+</div>
+<div id="case-study" class="section level2">
+<h2>Case study</h2>
+<p>Now that we have exposed the theoretical grounds of our methods, we explain how to use them in practice for epistasis detection. For that purpose, we illustrate their usage on a synthetic dataset included with this package. Using HAPGEN2 <span class="citation">(Su, Marchini, and Donnelly 2011)</span>, we simulated <span class="math inline">\(450\)</span> SNPs on the <span class="math inline">\(22^{nd}\)</span> chromosome between the nucleotide positions <span class="math inline">\(16061016\)</span> and <span class="math inline">\(19976834\)</span> in the GRCh37 coordinates. The prior QC steps to control for rare variants (<span class="math inline">\(\text{MAF} &lt; 0.01\)</span>) and Hardy–Weinberg equilibrium (<span class="math inline">\(p &lt; 10^{-6}\)</span>) have already been performed. The simulated genotypes are saved as an integer matrix. We also included their minor allele frequencies (MAFs).</p>
+<p>The first step in the pipeline is to load the genotypes matrix and the SNP MAFs vector.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">require</span>(<span class="st">&quot;epiGWAS&quot;</span>)</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="co">#&gt; Loading required package: epiGWAS</span></a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="kw">data</span>(genotypes)</a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="kw">data</span>(maf)</a></code></pre></div>
+<div id="linkage-disequilibrium-around-the-target" class="section level3">
+<h3>Linkage disequilibrium around the target</h3>
+<p>To alleviate issues of linkage disequilibrium around the target <span class="math inline">\(A\)</span> and avoid overfitting in the estimation of the propensity scores <span class="math inline">\(\pi(A\lvert X)\)</span>, we remove all SNPs within a certain window of <span class="math inline">\(A\)</span>. On each side of the target, the width of the window is of three clusters. The clusters are the result of an unsupervised clustering procedure such as hierarchical clustering. Compared to fixed-size windows, such dynamic windows allow to better account for genetic architecture.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">set.seed</span>(<span class="dv">347</span>)</a>
+<a class="sourceLine" id="cb2-2" title="2">sigma &lt;-<span class="st"> </span><span class="kw">cor</span>(genotypes)</a>
+<a class="sourceLine" id="cb2-3" title="3">sigma_distance &lt;-<span class="st"> </span><span class="kw">as.dist</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">abs</span>(sigma))</a>
+<a class="sourceLine" id="cb2-4" title="4">hc &lt;-<span class="st"> </span><span class="kw">hclust</span>(sigma_distance, <span class="dt">method =</span> <span class="st">&quot;single&quot;</span>)</a>
+<a class="sourceLine" id="cb2-5" title="5">corr_max &lt;-<span class="st"> </span><span class="fl">0.5</span></a>
+<a class="sourceLine" id="cb2-6" title="6">clusters &lt;-<span class="st"> </span><span class="kw">cutree</span>(hc, <span class="dt">h =</span> <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>corr_max)</a></code></pre></div>
+</div>
+<div id="genotype-construction" class="section level3">
+<h3>Genotype construction</h3>
+<p>After the clustering procedure, we can sample the causal SNPs. Beside the target, the other causal variants are sampled outside of the LD window. In total, we sample <span class="math inline">\(80\)</span> SNPs that interact with the target, <span class="math inline">\(20\)</span> SNPs with marginal effects and <span class="math inline">\(20\)</span> additional SNP pairs with epistatic effects. Moreover, among the <span class="math inline">\(80\)</span> synergistic SNPs, <span class="math inline">\(10\)</span> also have separate marginal effects and another <span class="math inline">\(5\)</span> have additional epistatic effects (with another SNP than the target). The <code>sample_SNP</code> function samples at most one causal SNP per cluster to avoid duplication of effects. Despite the high number of SNPs selected to be causal, the problem is still imbalanced with <span class="math inline">\(80\)</span> out of <span class="math inline">\(414\)</span> SNPs being causal.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># Parameterization of the disease model</span></a>
+<a class="sourceLine" id="cb3-2" title="2">window_target &lt;-<span class="st"> </span><span class="dv">3</span> <span class="co"># Width of the LD window on each side of the target</span></a>
+<a class="sourceLine" id="cb3-3" title="3">nX &lt;-<span class="st"> </span><span class="dv">80</span> <span class="co"># Number of SNPs interacting with the target</span></a>
+<a class="sourceLine" id="cb3-4" title="4">nY &lt;-<span class="st"> </span><span class="dv">20</span> <span class="co"># Number of SNPs with marginal effects</span></a>
+<a class="sourceLine" id="cb3-5" title="5">nZ12 &lt;-<span class="st"> </span><span class="dv">20</span> <span class="co"># Number of SNP pairs with epistatic effects</span></a>
+<a class="sourceLine" id="cb3-6" title="6">overlap_marg &lt;-<span class="st"> </span><span class="dv">10</span> <span class="co"># Number of SNPs interacting with the target in addition to having marginal effects</span></a>
+<a class="sourceLine" id="cb3-7" title="7">overlap_inter &lt;-<span class="st"> </span><span class="dv">5</span> <span class="co"># Number of SNPs interacting with the target in addition to having epistatic effects</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">set.seed</span>(<span class="dv">347</span>)</a>
+<a class="sourceLine" id="cb4-2" title="2">causal &lt;-<span class="st"> </span><span class="kw">sample_SNP</span>(</a>
+<a class="sourceLine" id="cb4-3" title="3">  nX, nY, nZ12,</a>
+<a class="sourceLine" id="cb4-4" title="4">  clusters, maf, <span class="dt">thresh_MAF =</span> <span class="fl">0.01</span>,</a>
+<a class="sourceLine" id="cb4-5" title="5">  <span class="dt">window_size =</span> window_target, <span class="dt">overlap_marg =</span> overlap_marg, <span class="dt">overlap_inter =</span> overlap_inter</a>
+<a class="sourceLine" id="cb4-6" title="6">)</a>
+<a class="sourceLine" id="cb4-7" title="7">clusters &lt;-<span class="st"> </span><span class="kw">merge_cluster</span>(clusters, <span class="dt">center =</span> clusters[causal<span class="op">$</span>target], <span class="dt">k =</span> window_target)</a></code></pre></div>
+<p>Finally, we only retain the target from all SNPs in its surrounding LD window:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">genotypes &lt;-<span class="st"> </span>genotypes[, (clusters <span class="op">!=</span><span class="st"> </span>clusters[causal<span class="op">$</span>target]) <span class="op">|</span><span class="st"> </span>(<span class="kw">colnames</span>(genotypes) <span class="op">==</span><span class="st"> </span>causal<span class="op">$</span>target)]</a></code></pre></div>
+</div>
+<div id="phenotype-simulation" class="section level3">
+<h3>Phenotype simulation</h3>
+<p>The phenotypes are simulated according to a logistic model in which the effect sizes are sampled from a normal distribution of mean <span class="math inline">\(0\)</span> and standard deviation <span class="math inline">\(1\)</span>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">set.seed</span>(<span class="dv">347</span>)</a>
+<a class="sourceLine" id="cb6-2" title="2">model &lt;-<span class="st"> </span><span class="kw">gen_model</span>(nX, nY, nZ12, <span class="dt">mean =</span> <span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">4</span>), <span class="dt">sd =</span> <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">4</span>)) <span class="co"># Sampling of size effects</span></a>
+<a class="sourceLine" id="cb6-3" title="3">phenotype &lt;-<span class="st"> </span><span class="kw">sim_phenotype</span>(genotypes, causal, model) <span class="co"># Phenotype simulation</span></a></code></pre></div>
+</div>
+<div id="epistasis-detection" class="section level3">
+<h3>Epistasis detection</h3>
+<p>As the fastPHASE software cannot be included with this package, we directly provide the propensity scores vector. The results can be reproduced by running <code>fast_HMM</code> with the dimensionality of the latent space <code>n_state = 10</code> and the number of iterations for the EM algorithm <code>n_iter = 20</code>.</p>
+<p>Before applying our epistasis detection methods, we separate the target <span class="math inline">\(A\)</span> from the rest of the genotype, denoted here by <span class="math inline">\(X\)</span>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">data</span>(<span class="st">&quot;propensity&quot;</span>)</a>
+<a class="sourceLine" id="cb7-2" title="2">A &lt;-<span class="st"> </span>genotypes[, causal<span class="op">$</span>target] <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb7-3" title="3">X &lt;-<span class="st"> </span>genotypes[, <span class="kw">colnames</span>(genotypes) <span class="op">!=</span><span class="st"> </span>causal<span class="op">$</span>target]</a></code></pre></div>
+<p>We now run all methods with their default settings, which generally offers a good trade-off between speed and inference performance</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">stability_scores &lt;-<span class="st"> </span><span class="kw">epiGWAS</span>(A, X, phenotype, propensity,</a>
+<a class="sourceLine" id="cb8-2" title="2">                            <span class="dt">methods =</span> <span class="kw">c</span>(<span class="st">&quot;OWL&quot;</span>, <span class="st">&quot;modified_outcome&quot;</span>, <span class="st">&quot;shifted_outcome&quot;</span>,</a>
+<a class="sourceLine" id="cb8-3" title="3">                                        <span class="st">&quot;normalized_outcome&quot;</span>, <span class="st">&quot;robust_outcome&quot;</span>),</a>
+<a class="sourceLine" id="cb8-4" title="4">                            <span class="dt">parallel =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<p>The last step is to evaluate the epistasis detection performance in terms of the areas under the receiver operating characteristic (ROC) and precision/recall (PR) curves.</p>
+<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Areas under the ROC and PR curves
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Method
+</th>
+<th style="text-align:right;">
+ROC
+</th>
+<th style="text-align:right;">
+PRC
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Modified outcome
+</td>
+<td style="text-align:right;">
+0.5701764
+</td>
+<td style="text-align:right;">
+0.2140933
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Normalized modified outcome
+</td>
+<td style="text-align:right;">
+0.6028341
+</td>
+<td style="text-align:right;">
+0.2287166
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+OWL
+</td>
+<td style="text-align:right;">
+0.5144520
+</td>
+<td style="text-align:right;">
+0.2013872
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;color: white;background-color: #37648d;">
+Robust modified outcome
+</td>
+<td style="text-align:right;font-weight: bold;color: white;background-color: #37648d;">
+0.6530781
+</td>
+<td style="text-align:right;font-weight: bold;color: white;background-color: #37648d;">
+0.3317383
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Shifted modified outcome
+</td>
+<td style="text-align:right;">
+0.5892830
+</td>
+<td style="text-align:right;">
+0.2228738
+</td>
+</tr>
+</tbody>
+</table>
+<p>The results are perfectly concordant with our findings in <span class="citation">(Slim et al. 2018)</span>. Among the five methods, robust modified outcome is obviously the best performer in terms of areas under both the ROC and the PR curves.</p>
+</div>
+</div>
+<div id="references" class="section level2 unnumbered">
+<h2>References</h2>
+<div id="refs" class="references">
+<div id="ref-Lunceford2004">
+<p>Lunceford, Jared K., and Marie Davidian. 2004. “Stratification and weighting via the propensity score in estimation of causal treatment effects: A comparative study.” <em>Statistics in Medicine</em> 23 (19): 2937–60. <a href="https://doi.org/10.1002/sim.1903">https://doi.org/10.1002/sim.1903</a>.</p>
+</div>
+<div id="ref-Meinshausen2010">
+<p>Meinshausen, Nicolai, and Peter Bühlmann. 2010. “Stability selection.” <em>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</em> 72 (4): 417–73. <a href="https://doi.org/10.1111/j.1467-9868.2010.00740.x">https://doi.org/10.1111/j.1467-9868.2010.00740.x</a>.</p>
+</div>
+<div id="ref-rosenbaum1983">
+<p>Rosenbaum, Paul R, and Donald B Rubin. 1983. “The Central Role of the Propensity Score in Observational Studies for Causal Effects.” <em>Biometrika</em> 70 (1): 41–55.</p>
+</div>
+<div id="ref-Slim2018">
+<p>Slim, Lotfi, Clément Chatelain, Chloé-Agathe Azencott, and Jean-Philippe Vert. 2018. “Novel Methods for Epistasis Detection in Genome-Wide Association Studies.” <em>bioRxiv</em>, January. <a href="http://biorxiv.org/content/early/2018/10/14/442749">http://biorxiv.org/content/early/2018/10/14/442749</a>.</p>
+</div>
+<div id="ref-Su2011">
+<p>Su, Zhan, Jonathan Marchini, and Peter Donnelly. 2011. “HAPGEN2: Simulation of Multiple Disease SNPs.” <em>Bioinformatics</em> 27 (16): 2304–5. <a href="https://doi.org/10.1093/bioinformatics/btr341">https://doi.org/10.1093/bioinformatics/btr341</a>.</p>
+</div>
+<div id="ref-Wan2010">
+<p>Wan, Xiang, Can Yang, Qiang Yang, Hong Xue, Xiaodan Fan, Nelson L.S. Tang, and Weichuan Yu. 2010. “BOOST: A Fast Approach to Detecting Gene-Gene Interactions in Genome-Wide Case-Control Studies.” <em>The American Journal of Human Genetics</em> 87 (3): 325–40. <a href="https://doi.org/10.1016/j.ajhg.2010.07.021">https://doi.org/10.1016/j.ajhg.2010.07.021</a>.</p>
+</div>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
