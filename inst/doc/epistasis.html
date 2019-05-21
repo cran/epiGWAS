@@ -12,19 +12,23 @@
 
 <meta name="author" content="Lotfi Slim" />
 
-<meta name="date" content="2018-12-04" />
+<meta name="date" content="2019-05-21" />
 
 <title>Robust epistasis detection with epiGWAS</title>
 
 <script>$(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip();
-    $('[data-toggle="popover"]').popover();
+    if (typeof $('[data-toggle="tooltip"]').tooltip === 'function') {
+        $('[data-toggle="tooltip"]').tooltip();
+    }
+    if ($('[data-toggle="popover"]').popover === 'function') {
+        $('[data-toggle="popover"]').popover();
+    }
 });
 </script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
+<style type="text/css" data-origin="pandoc">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
 a.sourceLine:empty { height: 1.2em; }
@@ -86,7 +90,29 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
 </style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
 
 
 
@@ -274,6 +300,9 @@ code > span.al { color: #ff0000; font-weight: bold; }
 code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
+
+
+
 </head>
 
 <body>
@@ -282,8 +311,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 
 <h1 class="title toc-ignore">Robust epistasis detection with epiGWAS</h1>
-<h4 class="author"><em>Lotfi Slim</em></h4>
-<h4 class="date"><em>2018-12-04</em></h4>
+<h4 class="author">Lotfi Slim</h4>
+<h4 class="date">2019-05-21</h4>
 
 
 
@@ -392,6 +421,11 @@ d(X) = \ln \frac{\mathbb{E}(Y\lvert A = +1, X)}{\mathbb{E}(Y\lvert A = +1, X)}
 <a class="sourceLine" id="cb8-3" title="3">                                        <span class="st">&quot;normalized_outcome&quot;</span>, <span class="st">&quot;robust_outcome&quot;</span>),</a>
 <a class="sourceLine" id="cb8-4" title="4">                            <span class="dt">parallel =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
 <p>The last step is to evaluate the epistasis detection performance in terms of the areas under the receiver operating characteristic (ROC) and precision/recall (PR) curves.</p>
+<pre><code>#&gt; Registered S3 methods overwritten by &#39;ggplot2&#39;:
+#&gt;   method         from 
+#&gt;   [.quosures     rlang
+#&gt;   c.quosures     rlang
+#&gt;   print.quosures rlang</code></pre>
 <table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 Areas under the ROC and PR curves
@@ -415,10 +449,10 @@ PRC
 Modified outcome
 </td>
 <td style="text-align:right;">
-0.5701764
+0.7010269
 </td>
 <td style="text-align:right;">
-0.2140933
+0.3399078
 </td>
 </tr>
 <tr>
@@ -426,10 +460,10 @@ Modified outcome
 Normalized modified outcome
 </td>
 <td style="text-align:right;">
-0.6028341
+0.6680241
 </td>
 <td style="text-align:right;">
-0.2287166
+0.3237371
 </td>
 </tr>
 <tr>
@@ -437,21 +471,21 @@ Normalized modified outcome
 OWL
 </td>
 <td style="text-align:right;">
-0.5144520
+0.5243626
 </td>
 <td style="text-align:right;">
-0.2013872
+0.1959425
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold;color: white;background-color: #37648d;">
+<td style="text-align:left;font-weight: bold;color: white !important;background-color: #37648d !important;">
 Robust modified outcome
 </td>
-<td style="text-align:right;font-weight: bold;color: white;background-color: #37648d;">
-0.6530781
+<td style="text-align:right;font-weight: bold;color: white !important;background-color: #37648d !important;">
+0.6432897
 </td>
-<td style="text-align:right;font-weight: bold;color: white;background-color: #37648d;">
-0.3317383
+<td style="text-align:right;font-weight: bold;color: white !important;background-color: #37648d !important;">
+0.2944554
 </td>
 </tr>
 <tr>
@@ -459,10 +493,10 @@ Robust modified outcome
 Shifted modified outcome
 </td>
 <td style="text-align:right;">
-0.5892830
+0.6751771
 </td>
 <td style="text-align:right;">
-0.2228738
+0.3079225
 </td>
 </tr>
 </tbody>
@@ -489,7 +523,7 @@ Shifted modified outcome
 <p>Su, Zhan, Jonathan Marchini, and Peter Donnelly. 2011. “HAPGEN2: Simulation of Multiple Disease SNPs.” <em>Bioinformatics</em> 27 (16): 2304–5. <a href="https://doi.org/10.1093/bioinformatics/btr341">https://doi.org/10.1093/bioinformatics/btr341</a>.</p>
 </div>
 <div id="ref-Wan2010">
-<p>Wan, Xiang, Can Yang, Qiang Yang, Hong Xue, Xiaodan Fan, Nelson L.S. Tang, and Weichuan Yu. 2010. “BOOST: A Fast Approach to Detecting Gene-Gene Interactions in Genome-Wide Case-Control Studies.” <em>The American Journal of Human Genetics</em> 87 (3): 325–40. <a href="https://doi.org/10.1016/j.ajhg.2010.07.021">https://doi.org/10.1016/j.ajhg.2010.07.021</a>.</p>
+<p>Wan, Xiang, Can Yang, Qiang Yang, Hong Xue, Xiaodan Fan, Nelson L. S. Tang, and Weichuan Yu. 2010. “BOOST: A Fast Approach to Detecting Gene-Gene Interactions in Genome-Wide Case-Control Studies.” <em>The American Journal of Human Genetics</em> 87 (3): 325–40. <a href="https://doi.org/10.1016/j.ajhg.2010.07.021">https://doi.org/10.1016/j.ajhg.2010.07.021</a>.</p>
 </div>
 </div>
 </div>

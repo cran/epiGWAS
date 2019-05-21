@@ -1,6 +1,6 @@
 Package: epiGWAS
 Title: Robust Methods for Epistasis Detection
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: c(person("Lotfi", "Slim", email = "lotfi.slim@mines-paristech.fr", role = c("aut", "cre")),
   person("Clément", "Chatelain", email = "clement.chatelain@sanofi.com", role = "ctb"),
   person("Chloé-Agathe", "Azencott", email = "chloe-agathe.azencott@mines-paristech.fr", role ="ctb"),
@@ -23,11 +23,11 @@ LazyData: true
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2018-12-04 20:00:21 UTC; lotfislim
+Packaged: 2019-05-21 21:00:09 UTC; lotfislim
 Author: Lotfi Slim [aut, cre],
   Clément Chatelain [ctb],
   Chloé-Agathe Azencott [ctb],
   Jean-Philippe Vert [ctb]
 Maintainer: Lotfi Slim <lotfi.slim@mines-paristech.fr>
 Repository: CRAN
-Date/Publication: 2018-12-16 14:10:03 UTC
+Date/Publication: 2019-05-21 21:20:04 UTC
