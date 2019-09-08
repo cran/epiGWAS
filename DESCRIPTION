@@ -1,6 +1,6 @@
 Package: epiGWAS
 Title: Robust Methods for Epistasis Detection
-Version: 1.0.1
+Version: 1.0.2
 Authors@R: c(person("Lotfi", "Slim", email = "lotfi.slim@mines-paristech.fr", role = c("aut", "cre")),
   person("Clément", "Chatelain", email = "clement.chatelain@sanofi.com", role = "ctb"),
   person("Chloé-Agathe", "Azencott", email = "chloe-agathe.azencott@mines-paristech.fr", role ="ctb"),
@@ -14,20 +14,20 @@ Description: Functions to perform robust epistasis detection in genome-wide
   approaches, which differently incorporate the propensity score to only
   recover the synergistic effects between the target and the genotype.
 Depends: R (>= 3.4.0)
-Imports: matrixStats, DescTools, glmnet, SNPknock
-Suggests: foreach, iterators, precrec, parallel, doParallel, bigmemory,
-        biglasso, testthat, knitr, rmarkdown, kableExtra
+Imports: matrixStats, DescTools, glmnet, SNPknock, parallel
+Suggests: foreach, iterators, precrec, doParallel, bigmemory, biglasso,
+        testthat, knitr, rmarkdown, kableExtra
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2019-05-21 21:00:09 UTC; lotfislim
+Packaged: 2019-09-08 16:24:35 UTC; lotfislim
 Author: Lotfi Slim [aut, cre],
   Clément Chatelain [ctb],
   Chloé-Agathe Azencott [ctb],
   Jean-Philippe Vert [ctb]
 Maintainer: Lotfi Slim <lotfi.slim@mines-paristech.fr>
 Repository: CRAN
-Date/Publication: 2019-05-21 21:20:04 UTC
+Date/Publication: 2019-09-08 16:50:02 UTC

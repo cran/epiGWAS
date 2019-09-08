@@ -7,12 +7,13 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <meta name="author" content="Lotfi Slim" />
 
-<meta name="date" content="2019-05-21" />
+<meta name="date" content="2019-09-08" />
 
 <title>Robust epistasis detection with epiGWAS</title>
 
@@ -105,7 +106,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -312,7 +313,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Robust epistasis detection with epiGWAS</h1>
 <h4 class="author">Lotfi Slim</h4>
-<h4 class="date">2019-05-21</h4>
+<h4 class="date">2019-09-08</h4>
 
 
 
@@ -421,11 +422,6 @@ d(X) = \ln \frac{\mathbb{E}(Y\lvert A = +1, X)}{\mathbb{E}(Y\lvert A = +1, X)}
 <a class="sourceLine" id="cb8-3" title="3">                                        <span class="st">&quot;normalized_outcome&quot;</span>, <span class="st">&quot;robust_outcome&quot;</span>),</a>
 <a class="sourceLine" id="cb8-4" title="4">                            <span class="dt">parallel =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
 <p>The last step is to evaluate the epistasis detection performance in terms of the areas under the receiver operating characteristic (ROC) and precision/recall (PR) curves.</p>
-<pre><code>#&gt; Registered S3 methods overwritten by &#39;ggplot2&#39;:
-#&gt;   method         from 
-#&gt;   [.quosures     rlang
-#&gt;   c.quosures     rlang
-#&gt;   print.quosures rlang</code></pre>
 <table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 Areas under the ROC and PR curves
@@ -528,6 +524,9 @@ Shifted modified outcome
 </div>
 </div>
 
+
+
+<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

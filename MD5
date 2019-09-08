@@ -1,6 +1,6 @@
-9a029870ab0996be2d04bf3264bfb24c *DESCRIPTION
+ccbc4d22177d5f9abd415440dc4aa9c6 *DESCRIPTION
 da69567d8449d5c41ed869b7c604adfa *NAMESPACE
-ae142c6974a2d1373aaabad31c717fc6 *NEWS.md
+4564e6959a663213620915fb0a173f5d *NEWS.md
 64dbeb1ab844608f691bdd69f6b7ac27 *R/forward.R
 1d8bc2645e26ced1e0efbc600ad1a7ae *R/genotypes_data.R
 1657810e352a88ea132aa6a508d873a2 *R/likelihood.R
@@ -8,15 +8,15 @@ f3218ee48d7a6985b71ccc06124dde82 *R/maf_data.R
 ffc6acd6db6cd8947868d46cf121fed5 *R/methods.R
 b1adbbb86f4f0fe48bb3ef96d637e123 *R/model.R
 2e2027cac4795f338073c476313f74fe *R/propensity_data.R
-984ef2dd39a982905f291e02b523e6d9 *R/stability.R
+61802fee635e45dbc7469001d118240f *R/stability.R
 05fc916918252c96c649b0e0a7a0e04d *README.md
 a1b5572fac75fd8f53e640f282d101c6 *build/vignette.rds
 f414eaa141cdaa34078d15e9ae8679d0 *data/genotypes.rda
 563ee010c2d442ea4936e490630f29ce *data/maf.rda
 8b7df995ce81cd4bebf1efc1d8ab2c13 *data/propensity.rda
-29a76ce68b27c66469d06158d8197cc5 *inst/doc/epistasis.R
-96011764f054fd15e6e1daae3aa727ef *inst/doc/epistasis.Rmd
-56a278a5b9df98a64b156196e8b25bb2 *inst/doc/epistasis.html
+52d96945c8890625f65468f6d740bcd0 *inst/doc/epistasis.R
+548cc970d89f17e516f8024a6cd30e06 *inst/doc/epistasis.Rmd
+d2ddb5dc5ba41988479bf69ce1645b19 *inst/doc/epistasis.html
 e110516e230cb8cc4b5a3fe014f61eae *man/BOOST.Rd
 c9908281876faecabd997bf9ae1d9382 *man/OWL.Rd
 446f7d9bc7adfe4b04ad75235685782b *man/cond_prob.Rd
@@ -35,9 +35,9 @@ a445dd1475dc50dd985fdbdfcdc70e2a *man/propensity.Rd
 d386813485e1928392f3ea8e1a488348 *man/sample_SNP.Rd
 7090e4b1c5bd07d191315f11fa9253f3 *man/shifted_outcome.Rd
 6ffb4f8e706d4ebed59c64f079243417 *man/sim_phenotype.Rd
-3bd4f5771453e2bd01e56d812737fe56 *man/stabilityBIG.Rd
-5c8236d7acd78d0c8cbafde4a1a3a9ba *man/stabilityGLM.Rd
-3e4d0c62e5283a5e291ff40cf6cf73d5 *man/subsample.Rd
+cafb87df0a275fb520a7f82a17e2fb87 *man/stabilityBIG.Rd
+7a3b8a3307641a4987997080006546d1 *man/stabilityGLM.Rd
+fdee4d1e96803f26aa61ed26c544bddb *man/subsample.Rd
 1e9b5718ad90acd5eb6c53c9a3373d9b *tests/testthat.R
 c37c4c7e1dec72b0b878e36b43d57f3d *tests/testthat/test_boost.R
 9dd5d53bf515626343ea5bb931265315 *tests/testthat/test_forward.R
@@ -45,4 +45,4 @@ dd8a4fa8ba08ef3362c3471db93fe88b *tests/testthat/test_methods.R
 914626d4f878c2779f13893465a808ba *tests/testthat/test_stability.R
 05249ba94e7aa309c9ae88518424c720 *tests/testthat/test_utilities.R
 57820bede042276d8680f0ba465940d4 *vignettes/bibliography.bib
-96011764f054fd15e6e1daae3aa727ef *vignettes/epistasis.Rmd
+548cc970d89f17e516f8024a6cd30e06 *vignettes/epistasis.Rmd
